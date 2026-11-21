@@ -1,0 +1,3029 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GA na Prática — Conferência das Atividades Desplugadas (PROFMAT MA23)</title>
+    <meta
+      name="description"
+      content="Aplicação interativa offline de Geometria Analítica para projeção em sala de aula (PROFMAT MA23): Ponto de Equilíbrio (BEP) e Classificação KNN."
+    />
+    <meta
+      property="og:title"
+      content="GA na Prática — Conferência das Atividades Desplugadas (PROFMAT MA23)"
+    />
+    <meta
+      property="og:description"
+      content="Aplicação interativa offline de Geometria Analítica para projeção em sala de aula (PROFMAT MA23): Ponto de Equilíbrio (BEP) e Classificação KNN."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* MDA Light Palette */
+        --bg-page: #f6f7ff;
+        --bg-page-grad: radial-gradient(
+            ellipse 55% 58% at 15% 32%,
+            rgba(109, 93, 246, 0.24) 0%,
+            rgba(109, 93, 246, 0.08) 42%,
+            rgba(109, 93, 246, 0) 74%
+          ),
+          radial-gradient(
+            ellipse 48% 52% at 86% 84%,
+            rgba(236, 72, 153, 0.16) 0%,
+            rgba(236, 72, 153, 0.05) 42%,
+            rgba(236, 72, 153, 0) 72%
+          ),
+          radial-gradient(
+            ellipse 40% 40% at 52% 10%,
+            rgba(99, 102, 241, 0.09) 0%,
+            rgba(99, 102, 241, 0) 68%
+          ),
+          #fbfcff;
+        --bg-topbar: rgba(255, 255, 255, 0.78);
+        --bg-panel: rgba(255, 255, 255, 0.80);
+        --bg-stage-head: rgba(246, 247, 255, 0.76);
+        --bg-card: rgba(255, 255, 255, 0.84);
+        --bg-subtle: rgba(238, 242, 255, 0.90);
+        --bg-row-hit: rgba(99, 102, 241, 0.12);
+        --bg-row-hit-border: #6366f1;
+        --border: rgba(203, 213, 225, 0.85);
+        --border-strong: #c7d2fe;
+        --card-shadow:
+          0 14px 36px rgba(99, 102, 241, 0.09),
+          0 2px 8px rgba(15, 23, 42, 0.04);
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+
+        --accent: #6366f1;
+        --accent-strong: #4f46e5;
+        --accent-soft: #eef2ff;
+        --accent-glow: 0 4px 16px rgba(99, 102, 241, 0.34);
+
+        --red: #dc2626;
+        --red-soft: rgba(254, 242, 242, 0.92);
+        --red-border: #fca5a5;
+        --blue: #2563eb;
+        --blue-soft: rgba(239, 246, 255, 0.92);
+        --blue-border: #93c5fd;
+        --orange: #ea580c;
+        --orange-soft: rgba(255, 247, 237, 0.92);
+        --orange-border: #fdba74;
+        --green: #15803d;
+        --green-soft: rgba(240, 253, 244, 0.92);
+        --green-border: #86efac;
+        --gold: #d97706;
+
+        --btn-primary-bg: linear-gradient(135deg, #6d5df6 0%, #5b5af7 100%);
+        --btn-primary-fg: #ffffff;
+        --btn-primary-hover: linear-gradient(135deg, #5b4cf0 0%, #4f46e5 100%);
+        --btn-sec-bg: rgba(255, 255, 255, 0.92);
+        --btn-sec-fg: #0f172a;
+        --btn-sec-hover: #eef2ff;
+        --tab-active-bg: linear-gradient(135deg, #6d5df6 0%, #5b5af7 100%);
+        --tab-active-fg: #ffffff;
+        --tab-idle-bg: rgba(238, 242, 255, 0.85);
+        --tab-idle-fg: #475569;
+
+        --slider-track: #dde3f3;
+        --slider-thumb: #6366f1;
+        --slider-thumb-ring: #ffffff;
+        --focus-ring: #6366f1;
+      }
+
+      html.dark {
+        /* MDA Dark Palette */
+        --bg-page: #090a12;
+        --bg-page-grad: radial-gradient(
+            ellipse 54% 58% at 14% 26%,
+            rgba(99, 102, 241, 0.34) 0%,
+            rgba(99, 102, 241, 0.11) 42%,
+            rgba(99, 102, 241, 0) 74%
+          ),
+          radial-gradient(
+            ellipse 48% 54% at 86% 82%,
+            rgba(190, 56, 128, 0.28) 0%,
+            rgba(168, 85, 247, 0.10) 44%,
+            rgba(168, 85, 247, 0) 74%
+          ),
+          radial-gradient(
+            ellipse 38% 36% at 44% 66%,
+            rgba(14, 165, 233, 0.11) 0%,
+            rgba(14, 165, 233, 0) 70%
+          ),
+          #090a12;
+        --bg-topbar: rgba(13, 15, 25, 0.76);
+        --bg-panel: rgba(17, 19, 30, 0.72);
+        --bg-stage-head: rgba(21, 24, 39, 0.74);
+        --bg-card: rgba(17, 19, 30, 0.72);
+        --bg-subtle: rgba(29, 33, 52, 0.82);
+        --bg-row-hit: rgba(124, 107, 255, 0.22);
+        --bg-row-hit-border: #818cf8;
+        --border: #25293e;
+        --border-strong: #394060;
+        --card-shadow:
+          0 16px 44px rgba(0, 0, 0, 0.48),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #8b92a9;
+
+        --accent: #8b80ff;
+        --accent-strong: #6366f1;
+        --accent-soft: rgba(124, 107, 255, 0.18);
+        --accent-glow: 0 4px 20px rgba(110, 102, 255, 0.42);
+
+        --red: #f87171;
+        --red-soft: rgba(239, 68, 68, 0.14);
+        --red-border: #b91c1c;
+        --blue: #60a5fa;
+        --blue-soft: rgba(59, 130, 246, 0.15);
+        --blue-border: #2563eb;
+        --orange: #fb923c;
+        --orange-soft: rgba(249, 115, 22, 0.15);
+        --orange-border: #c2410c;
+        --green: #4ade80;
+        --green-soft: rgba(34, 197, 94, 0.14);
+        --green-border: #15803d;
+        --gold: #fbbf24;
+
+        --btn-primary-bg: linear-gradient(135deg, #7c6bff 0%, #6366f1 100%);
+        --btn-primary-fg: #ffffff;
+        --btn-primary-hover: linear-gradient(135deg, #8b7dff 0%, #7073f7 100%);
+        --btn-sec-bg: rgba(24, 28, 44, 0.85);
+        --btn-sec-fg: #f8fafc;
+        --btn-sec-hover: rgba(38, 44, 70, 0.95);
+        --tab-active-bg: linear-gradient(135deg, #7c6bff 0%, #6366f1 100%);
+        --tab-active-fg: #ffffff;
+        --tab-idle-bg: rgba(22, 25, 38, 0.85);
+        --tab-idle-fg: #94a3b8;
+
+        --slider-track: #272c42;
+        --slider-thumb: #8b80ff;
+        --slider-thumb-ring: #11131e;
+        --focus-ring: #8b80ff;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background: var(--bg-page-grad);
+        color: var(--text-primary);
+        font-family:
+          'Plus Jakarta Sans',
+          'Segoe UI',
+          system-ui,
+          -apple-system,
+          'Helvetica Neue',
+          Arial,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        user-select: none;
+      }
+
+      .app-shell {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* ================= TOP BAR ================= */
+      .topbar {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        height: clamp(54px, 6.2vh, 66px);
+        padding: 0 18px;
+        background: var(--bg-topbar);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .brand {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .brand-title {
+        font-size: clamp(20px, 1.55vw, 26px);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: var(--text-primary);
+        margin: 0;
+      }
+
+      .brand-accent {
+        color: var(--accent);
+      }
+
+      .brand-meta {
+        font-size: clamp(13px, 0.95vw, 16px);
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+
+      .tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--tab-idle-bg);
+        padding: 4px;
+        border-radius: 10px;
+        border: 1.5px solid var(--border);
+      }
+
+      .tab-btn {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--tab-idle-fg);
+        font-family: inherit;
+        font-size: clamp(15px, 1.15vw, 20px);
+        font-weight: 700;
+        padding: 7px 18px;
+        border-radius: 7px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition:
+          background-color 140ms ease,
+          color 140ms ease;
+      }
+
+      .tab-btn:hover:not(.active) {
+        color: var(--text-primary);
+      }
+
+      .tab-btn.active {
+        background: var(--tab-active-bg);
+        color: var(--tab-active-fg);
+        box-shadow: var(--accent-glow);
+      }
+
+      .tab-btn:focus-visible,
+      .btn:focus-visible,
+      .icon-btn:focus-visible,
+      .zoom-btn:focus-visible,
+      input[type='range']:focus-visible,
+      input[type='checkbox']:focus-visible {
+        outline: 3px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+
+      .topbar-utils {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+
+      .f11-hint {
+        appearance: none;
+        background: transparent;
+        border: none;
+        padding: 4px 6px;
+        font-family: inherit;
+        font-size: clamp(12px, 0.9vw, 15px);
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+
+      .f11-hint:hover {
+        color: var(--text-primary);
+        background: var(--bg-subtle);
+      }
+
+      .icon-btn {
+        appearance: none;
+        border: 1.5px solid var(--border);
+        background: var(--bg-panel);
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: clamp(13px, 0.9vw, 15px);
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        transition:
+          background-color 140ms ease,
+          border-color 140ms ease;
+      }
+
+      .icon-btn:hover {
+        background: var(--bg-subtle);
+        border-color: var(--border-strong);
+        color: var(--text-primary);
+      }
+
+      /* ================= WORKSPACE ================= */
+      .workspace {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: none;
+        grid-template-columns: 68fr 32fr;
+        gap: 14px;
+        padding: 12px 16px;
+        overflow: hidden;
+      }
+
+      .workspace.active {
+        display: grid;
+      }
+
+      /* ================= LEFT STAGE (CANVAS) ================= */
+      .stage-panel {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        background: var(--bg-card);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+      }
+
+      .stage-header {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 16px;
+        background: var(--bg-stage-head);
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .stage-title {
+        font-size: clamp(18px, 1.35vw, 24px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: var(--text-primary);
+        white-space: nowrap;
+      }
+
+      .stage-tools {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-shrink: 0;
+      }
+
+      .stage-legend {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: clamp(14px, 1.02vw, 17px);
+        font-weight: 700;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .legend-line {
+        display: inline-block;
+        width: 22px;
+        height: 5px;
+        border-radius: 2px;
+      }
+
+      .zoom-group {
+        display: inline-flex;
+        align-items: center;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: 9px;
+        overflow: hidden;
+      }
+
+      .zoom-btn {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: clamp(14px, 1vw, 17px);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        padding: 4px 10px;
+        min-width: 34px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          background-color 130ms ease,
+          color 130ms ease;
+      }
+
+      .zoom-btn + .zoom-btn {
+        border-left: 1.5px solid var(--border);
+      }
+
+      .zoom-btn:hover:not(:disabled) {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+      }
+
+      html.dark .zoom-btn:hover:not(:disabled) {
+        color: var(--accent);
+      }
+
+      .zoom-btn:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+
+      .zoom-btn.zoom-label {
+        font-size: clamp(12px, 0.88vw, 15px);
+        font-weight: 700;
+        min-width: 54px;
+        color: var(--text-secondary);
+      }
+
+      .canvas-wrap {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        position: relative;
+        background: transparent;
+      }
+
+      .canvas-wrap canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #knnCanvas {
+        touch-action: none;
+        cursor: crosshair;
+      }
+
+      /* ================= RIGHT PANEL (CONTROLS) ================= */
+      .control-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: clamp(8px, 1.1vh, 14px);
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(10px, 1.3vh, 16px);
+        background: var(--bg-panel);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding-bottom: 6px;
+        border-bottom: 1.5px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .panel-title {
+        font-size: clamp(22px, 1.65vw, 28px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin: 0;
+        color: var(--text-primary);
+        letter-spacing: -0.015em;
+      }
+
+      /* Sliders */
+      .sliders-group {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(8px, 1.2vh, 14px);
+        flex-shrink: 0;
+      }
+
+      .slider-block {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .slider-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .slider-label {
+        font-size: clamp(16px, 1.15vw, 20px);
+        font-weight: 700;
+        color: var(--text-secondary);
+      }
+
+      .slider-val {
+        font-size: clamp(24px, 1.9vw, 32px);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-primary);
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .slider-val.cost {
+        color: var(--red);
+      }
+
+      .slider-val.rev {
+        color: var(--blue);
+      }
+
+      input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 12px;
+        border-radius: 6px;
+        background: var(--slider-track);
+        cursor: pointer;
+        margin: 4px 0 2px;
+      }
+
+      input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--slider-thumb);
+        border: 3px solid var(--slider-thumb-ring);
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
+        cursor: pointer;
+      }
+
+      input[type='range']::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--slider-thumb);
+        border: 3px solid var(--slider-thumb-ring);
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
+        cursor: pointer;
+      }
+
+      input[type='range'].cost-range::-webkit-slider-thumb {
+        background: var(--red);
+      }
+      input[type='range'].cost-range::-moz-range-thumb {
+        background: var(--red);
+      }
+      input[type='range'].rev-range::-webkit-slider-thumb {
+        background: var(--blue);
+      }
+      input[type='range'].rev-range::-moz-range-thumb {
+        background: var(--blue);
+      }
+
+      /* Large Checkbox Row */
+      .check-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: clamp(7px, 0.9vh, 11px) 12px;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: 9px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .check-row:hover {
+        border-color: var(--border-strong);
+      }
+
+      .check-row input[type='checkbox'] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        border-radius: 6px;
+        border: 2px solid var(--border-strong);
+        background: var(--bg-subtle);
+        cursor: pointer;
+        flex-shrink: 0;
+        position: relative;
+        transition:
+          background 130ms ease,
+          border-color 130ms ease;
+      }
+
+      .check-row input[type='checkbox']:checked {
+        background: var(--btn-primary-bg);
+        border-color: transparent;
+      }
+
+      .check-row input[type='checkbox']:checked::after {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 2px;
+        width: 6px;
+        height: 11px;
+        border: solid #ffffff;
+        border-width: 0 2.6px 2.6px 0;
+        transform: rotate(45deg);
+      }
+
+      .check-row span {
+        font-size: clamp(15px, 1.05vw, 19px);
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      /* Action Buttons */
+      .btn-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .btn-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .btn {
+        appearance: none;
+        font-family: inherit;
+        font-size: clamp(15px, 1.05vw, 18px);
+        font-weight: 700;
+        padding: clamp(9px, 1.05vh, 13px) 12px;
+        border-radius: 10px;
+        border: 1.5px solid var(--border-strong);
+        background: var(--btn-sec-bg);
+        color: var(--btn-sec-fg);
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.2;
+        transition:
+          background 140ms ease,
+          border-color 140ms ease,
+          box-shadow 140ms ease,
+          transform 90ms ease;
+      }
+
+      .btn:hover {
+        background: var(--btn-sec-hover);
+        border-color: var(--accent);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .btn-primary {
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border-color: transparent;
+        box-shadow: var(--accent-glow);
+      }
+
+      .btn-primary:hover {
+        background: var(--btn-primary-hover);
+        border-color: transparent;
+      }
+
+      .btn-challenge {
+        background: var(--red-soft);
+        color: var(--red);
+        border-color: var(--red);
+      }
+
+      .btn-challenge:hover {
+        background: var(--red);
+        color: #ffffff;
+        border-color: var(--red);
+      }
+
+      .btn-compact {
+        padding: 6px 12px;
+        font-size: clamp(14px, 0.96vw, 16px);
+        white-space: nowrap;
+      }
+
+      .btn.k-active {
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border-color: transparent;
+        box-shadow: var(--accent-glow);
+      }
+
+      /* Result & Verdict Cards */
+      .result-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: clamp(8px, 1vh, 12px);
+        padding: clamp(10px, 1.3vh, 16px);
+        background: var(--bg-stage-head);
+        border: 2px solid var(--accent);
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+
+      .eq-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: clamp(18px, 1.35vw, 24px);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        padding-bottom: 8px;
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .eq-cost {
+        color: var(--red);
+      }
+
+      .eq-rev {
+        color: var(--blue);
+      }
+
+      .eq-sep {
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .bep-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 4px;
+      }
+
+      .bep-kicker {
+        font-size: clamp(14px, 1vw, 17px);
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      .bep-value {
+        font-size: clamp(26px, 2.05vw, 35px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-primary);
+        line-height: 1.15;
+      }
+
+      .bep-alert {
+        font-size: clamp(21px, 1.6vw, 28px);
+        font-weight: 800;
+        color: var(--red);
+        background: var(--red-soft);
+        border: 2px solid var(--red-border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        width: 100%;
+      }
+
+      /* KNN Distance Table */
+      .table-wrap {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .dist-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .dist-table th {
+        background: var(--bg-subtle);
+        color: var(--text-muted);
+        font-size: clamp(13px, 0.92vw, 16px);
+        font-weight: 800;
+        text-align: left;
+        padding: clamp(5px, 0.7vh, 8px) 10px;
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .dist-table th:last-child,
+      .dist-table td:last-child {
+        text-align: right;
+      }
+
+      .dist-table td {
+        font-size: clamp(16px, 1.18vw, 21px);
+        font-weight: 700;
+        padding: clamp(5px, 0.75vh, 9px) 10px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-primary);
+        white-space: nowrap;
+      }
+
+      .dist-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .dist-table tbody tr.captured {
+        background: var(--bg-row-hit);
+      }
+
+      .dist-table tbody tr.captured td:first-child {
+        font-weight: 900;
+      }
+
+      .class-agitada {
+        color: var(--orange);
+        font-weight: 800;
+      }
+
+      .class-calma {
+        color: var(--blue);
+        font-weight: 800;
+      }
+
+      .dist-num {
+        font-weight: 900;
+        font-size: clamp(18px, 1.3vw, 23px);
+      }
+
+      /* KNN Verdict */
+      .circle-eq {
+        font-size: clamp(16px, 1.18vw, 21px);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+        color: var(--text-secondary);
+        padding-bottom: 6px;
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .verdict-main {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .verdict-kicker {
+        font-size: clamp(14px, 1vw, 17px);
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      .verdict-result {
+        font-size: clamp(24px, 1.85vw, 33px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+      }
+
+      .verdict-votes {
+        font-size: clamp(16px, 1.15vw, 20px);
+        font-weight: 800;
+        color: var(--text-secondary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      sub,
+      sup {
+        font-size: 0.7em;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+      }
+      sup {
+        top: -0.45em;
+      }
+      sub {
+        bottom: -0.22em;
+      }
+
+      @media (max-width: 1100px) {
+        .brand-meta {
+          display: none;
+        }
+        .workspace.active {
+          grid-template-columns: 60fr 40fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- ================= TOP BAR ================= -->
+      <header class="topbar">
+        <div class="brand">
+          <h1 class="brand-title">GA <span class="brand-accent">na Prática</span></h1>
+          <span class="brand-meta">· PROFMAT MA23</span>
+        </div>
+
+        <nav class="tabs" role="tablist" aria-label="Atividades Desplugadas">
+          <button
+            id="tabBtnBep"
+            class="tab-btn active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panelBep"
+            type="button"
+          >
+            1. Economia (BEP)
+          </button>
+          <button
+            id="tabBtnKnn"
+            class="tab-btn"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panelKnn"
+            type="button"
+          >
+            2. Ciência de Dados (KNN)
+          </button>
+        </nav>
+
+        <div class="topbar-utils">
+          <button
+            id="fullscreenBtn"
+            class="f11-hint"
+            type="button"
+            title="Alternar tela cheia (F11)"
+          >
+            F11: Tela Cheia
+          </button>
+          <button
+            id="themeToggleBtn"
+            class="icon-btn"
+            type="button"
+            aria-pressed="false"
+            title="Alternar tema claro/escuro"
+          >
+            <span id="themeIcon" aria-hidden="true">☾</span>
+            <span id="themeLabel">Escuro</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ================= TAB 1: ECONOMIA (BEP) ================= -->
+      <main
+        id="panelBep"
+        class="workspace active"
+        role="tabpanel"
+        aria-labelledby="tabBtnBep"
+      >
+        <section class="stage-panel" aria-label="Plano Cartesiano - Ponto de Equilíbrio">
+          <div class="stage-header">
+            <h2 class="stage-title">Ficha 1 — Plano Cartesiano (BEP)</h2>
+            <div class="stage-tools">
+              <div class="stage-legend">
+                <span class="legend-item">
+                  <span class="legend-line" style="background: var(--red)"></span>
+                  C(x) Custo
+                </span>
+                <span class="legend-item">
+                  <span class="legend-line" style="background: var(--blue)"></span>
+                  R(x) Receita
+                </span>
+              </div>
+              <div class="zoom-group" role="group" aria-label="Zoom do gráfico">
+                <button
+                  id="btnZoomOut"
+                  class="zoom-btn"
+                  type="button"
+                  title="Afastar zoom (ampliar eixos)"
+                  aria-label="Zoom out"
+                >
+                  −
+                </button>
+                <button
+                  id="btnZoomReset"
+                  class="zoom-btn zoom-label"
+                  type="button"
+                  title="Restaurar escala padrão da Ficha 1 (0..16 × 0..750)"
+                >
+                  100%
+                </button>
+                <button
+                  id="btnZoomIn"
+                  class="zoom-btn"
+                  type="button"
+                  title="Aproximar zoom"
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="bepCanvasWrap" class="canvas-wrap">
+            <canvas id="bepCanvas"></canvas>
+          </div>
+        </section>
+
+        <aside class="control-panel" aria-label="Controles da Atividade 1">
+          <div class="panel-head">
+            <h2 class="panel-title">O Negócio da Formatura</h2>
+          </div>
+
+          <div class="sliders-group">
+            <div class="slider-block">
+              <div class="slider-row">
+                <label class="slider-label" for="sliderCf">
+                  Custo Fixo (C<sub>f</sub>)
+                </label>
+                <span id="valCf" class="slider-val cost">R$ 300</span>
+              </div>
+              <input
+                id="sliderCf"
+                class="cost-range"
+                type="range"
+                min="100"
+                max="550"
+                step="50"
+                value="300"
+              />
+            </div>
+
+            <div class="slider-block">
+              <div class="slider-row">
+                <label class="slider-label" for="sliderCv">
+                  Custo Variável (c<sub>v</sub>)
+                </label>
+                <span id="valCv" class="slider-val cost">R$ 20</span>
+              </div>
+              <input
+                id="sliderCv"
+                class="cost-range"
+                type="range"
+                min="10"
+                max="40"
+                step="5"
+                value="20"
+              />
+            </div>
+
+            <div class="slider-block">
+              <div class="slider-row">
+                <label class="slider-label" for="sliderP">
+                  Preço de Venda (p)
+                </label>
+                <span id="valP" class="slider-val rev">R$ 50</span>
+              </div>
+              <input
+                id="sliderP"
+                class="rev-range"
+                type="range"
+                min="30"
+                max="80"
+                step="5"
+                value="50"
+              />
+            </div>
+          </div>
+
+          <label class="check-row" for="chkTablePoints">
+            <input id="chkTablePoints" type="checkbox" />
+            <span>Mostrar pontos da tabela (x = 0, 5, 10)</span>
+          </label>
+
+          <div class="btn-stack">
+            <button id="btnBepDefault" class="btn btn-primary" type="button">
+              Cenário Ficha 1 (Padrão: C<sub>f</sub>=300, c<sub>v</sub>=20, p=50)
+            </button>
+            <button id="btnBepChallenge" class="btn btn-challenge" type="button">
+              Desafio da Ficha (C<sub>f</sub> = R$ 450)
+            </button>
+          </div>
+
+          <div class="result-card" aria-live="polite">
+            <div id="bepEquations" class="eq-line">
+              <span class="eq-cost">C(x) = 20x + 300</span>
+              <span class="eq-sep">|</span>
+              <span class="eq-rev">R(x) = 50x</span>
+            </div>
+            <div id="bepResultBox" class="bep-box">
+              <span class="bep-kicker">
+                Ponto de Equilíbrio (x<sub>E</sub>, y<sub>E</sub>)
+              </span>
+              <div id="bepResultVal" class="bep-value">
+                10 camisetas · R$ 500
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <!-- ================= TAB 2: CIÊNCIA DE DADOS (KNN) ================= -->
+      <main
+        id="panelKnn"
+        class="workspace"
+        role="tabpanel"
+        aria-labelledby="tabBtnKnn"
+      >
+        <section class="stage-panel" aria-label="Plano Cartesiano - Algoritmo KNN">
+          <div class="stage-header">
+            <h2 class="stage-title">Ficha 2 — Plano Cartesiano (1:1)</h2>
+            <div class="stage-tools">
+              <div class="stage-legend">
+                <span class="legend-item class-agitada">▲ Agitada</span>
+                <span class="legend-item class-calma">■ Calma</span>
+                <span class="legend-item" id="legendU">★ U(3, 6) · arraste</span>
+              </div>
+              <div class="zoom-group" role="group" aria-label="Zoom do gráfico KNN">
+                <button
+                  id="btnKnnZoomOut"
+                  class="zoom-btn"
+                  type="button"
+                  title="Afastar zoom (ampliar plano 1:1)"
+                  aria-label="Zoom out KNN"
+                >
+                  −
+                </button>
+                <button
+                  id="btnKnnZoomReset"
+                  class="zoom-btn zoom-label"
+                  type="button"
+                  title="Restaurar escala padrão da Ficha 2 (0..11)"
+                >
+                  100%
+                </button>
+                <button
+                  id="btnKnnZoomIn"
+                  class="zoom-btn"
+                  type="button"
+                  title="Aproximar zoom (plano 1:1)"
+                  aria-label="Zoom in KNN"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="knnCanvasWrap" class="canvas-wrap">
+            <canvas id="knnCanvas"></canvas>
+          </div>
+        </section>
+
+        <aside class="control-panel" aria-label="Controles da Atividade 2">
+          <div class="panel-head">
+            <h2 class="panel-title">O Algoritmo Humano</h2>
+            <button id="btnResetU" class="btn btn-compact" type="button">
+              Resetar U(3, 6)
+            </button>
+          </div>
+
+          <div class="btn-stack">
+            <div class="btn-row">
+              <button id="btnK1" class="btn" type="button">
+                K = 1 (Mais próxima)
+              </button>
+              <button id="btnK3" class="btn k-active" type="button">
+                K = 3 (3 Vizinhos)
+              </button>
+            </div>
+            <button id="btnAnimateString" class="btn btn-primary" type="button">
+              ▶ Animar Barbante
+            </button>
+          </div>
+
+          <div class="slider-block">
+            <div class="slider-row">
+              <label class="slider-label" for="sliderR">
+                Raio do Barbante (r)
+              </label>
+              <span id="valR" class="slider-val">5,05</span>
+            </div>
+            <input
+              id="sliderR"
+              type="range"
+              min="0"
+              max="9"
+              step="0.01"
+              value="5.05"
+            />
+          </div>
+
+          <label class="check-row" for="chkPythagoras">
+            <input id="chkPythagoras" type="checkbox" />
+            <span>Mostrar Triângulo de Pitágoras</span>
+          </label>
+
+          <div class="table-wrap">
+            <table class="dist-table" aria-label="Tabela de distâncias euclidianas">
+              <thead>
+                <tr>
+                  <th>Música</th>
+                  <th>Coord.</th>
+                  <th>Classe</th>
+                  <th>d(U, M)</th>
+                </tr>
+              </thead>
+              <tbody id="knnTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="result-card" aria-live="polite">
+            <div id="knnCircleEq" class="circle-eq">
+              (x − 3)<sup>2</sup> + (y − 6)<sup>2</sup> = 5,05<sup>2</sup>
+            </div>
+            <div class="verdict-main">
+              <span id="knnVerdictKicker" class="verdict-kicker">
+                Recomendação (K = 3)
+              </span>
+              <div id="knnVerdictResult" class="verdict-result class-agitada">
+                ▲ AGITADA
+              </div>
+              <div id="knnVerdictVotes" class="verdict-votes">
+                2 votos contra 1
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        'use strict';
+
+        /* =========================================================
+           UTILITIES
+        ========================================================= */
+        function fmtBR(num, maxDec) {
+          if (Math.abs(num - Math.round(num)) < 1e-6) {
+            return String(Math.round(num));
+          }
+          const fixed = num.toFixed(maxDec === undefined ? 2 : maxDec);
+          return fixed.replace(/\.?0+$/, '').replace('.', ',');
+        }
+
+        function fmtFixed2(num) {
+          return num.toFixed(2).replace('.', ',');
+        }
+
+        function fmtMoney(num) {
+          if (Math.abs(num - Math.round(num)) < 1e-6) {
+            return 'R$ ' + Math.round(num).toLocaleString('pt-BR');
+          }
+          return (
+            'R$ ' +
+            num.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+          );
+        }
+
+        const CANVAS_FONT = "'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif";
+
+        const BEP_ZOOM_LEVELS = [
+          { label: '200%', xMax: 8, xStep: 1, xMinor: 0.5, yMax: 400, yStep: 50, yMinor: 25 },
+          { label: '133%', xMax: 12, xStep: 1, xMinor: 0.5, yMax: 550, yStep: 50, yMinor: 25 },
+          { label: '100%', xMax: 16, xStep: 1, xMinor: 0.5, yMax: 750, yStep: 50, yMinor: 25 },
+          { label: '75%', xMax: 22, xStep: 2, xMinor: 1, yMax: 1100, yStep: 100, yMinor: 50 },
+          { label: '55%', xMax: 30, xStep: 2, xMinor: 1, yMax: 1500, yStep: 100, yMinor: 50 },
+          { label: '40%', xMax: 40, xStep: 5, xMinor: 1, yMax: 2000, yStep: 200, yMinor: 100 },
+          { label: '25%', xMax: 60, xStep: 5, xMinor: 2.5, yMax: 3000, yStep: 250, yMinor: 125 },
+        ];
+
+        const KNN_ZOOM_LEVELS = [
+          { label: '140%', min: 0, max: 8, step: 1, minor: 0.5 },
+          { label: '100%', min: 0, max: 11, step: 1, minor: 0.5 },
+          { label: '75%', min: -2, max: 13, step: 1, minor: 0.5 },
+          { label: '55%', min: -5, max: 15, step: 2, minor: 1 },
+          { label: '40%', min: -8, max: 18, step: 2, minor: 1 },
+        ];
+
+        function getThemeColors() {
+          const isDark = document.documentElement.classList.contains('dark');
+          if (isDark) {
+            return {
+              isDark: true,
+              plotBg: 'rgba(11, 13, 22, 0.68)',
+              gridMinor: 'rgba(139, 146, 169, 0.13)',
+              gridMajor: 'rgba(139, 146, 169, 0.27)',
+              originAxis: 'rgba(139, 128, 255, 0.55)',
+              axis: '#e2e8f0',
+              text: '#f8fafc',
+              textMuted: '#cbd5e1',
+              cost: '#f87171',
+              rev: '#60a5fa',
+              lossFill: 'rgba(248, 113, 113, 0.18)',
+              lossText: '#fca5a5',
+              profitFill: 'rgba(74, 222, 128, 0.18)',
+              profitText: '#86efac',
+              peCore: '#f8fafc',
+              peRing: '#fbbf24',
+              guide: '#a5b4fc',
+              labelBg: 'rgba(17, 19, 30, 0.94)',
+              labelBorder: '#8b80ff',
+              agitada: '#fb923c',
+              calma: '#60a5fa',
+              uColor: '#f8fafc',
+              uRing: '#8b80ff',
+              circleStroke: '#a5b4fc',
+              circleFill: 'rgba(124, 107, 255, 0.13)',
+              stringLine: '#fbbf24',
+              pythColor: '#38bdf8',
+              halo: '#0d0f18',
+            };
+          }
+          return {
+            isDark: false,
+            plotBg: 'rgba(255, 255, 255, 0.90)',
+            gridMinor: '#eef2ff',
+            gridMajor: '#dbe2f3',
+            originAxis: 'rgba(99, 102, 241, 0.45)',
+            axis: '#0f172a',
+            text: '#0f172a',
+            textMuted: '#475569',
+            cost: '#dc2626',
+            rev: '#2563eb',
+            lossFill: 'rgba(220, 38, 38, 0.11)',
+            lossText: '#991b1b',
+            profitFill: 'rgba(22, 163, 74, 0.13)',
+            profitText: '#166534',
+            peCore: '#0f172a',
+            peRing: '#f59e0b',
+            guide: '#5b5af7',
+            labelBg: 'rgba(255, 255, 255, 0.96)',
+            labelBorder: '#6d5df6',
+            agitada: '#ea580c',
+            calma: '#2563eb',
+            uColor: '#0f172a',
+            uRing: '#6d5df6',
+            circleStroke: '#5b5af7',
+            circleFill: 'rgba(109, 93, 246, 0.09)',
+            stringLine: '#0f172a',
+            pythColor: '#6d5df6',
+            halo: '#ffffff',
+          };
+        }
+
+        function drawRoundedRect(ctx, x, y, w, h, r) {
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+          ctx.lineTo(x + r, y + h);
+          ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.closePath();
+        }
+
+        /* =========================================================
+           STATE
+        ========================================================= */
+        const state = {
+          activeTab: 'bep',
+          bep: {
+            Cf: 300,
+            cv: 20,
+            p: 50,
+            showTablePoints: false,
+            zoomIndex: 2, // 100% = Ficha 1 (0..16 x 0..750)
+          },
+          knn: {
+            ux: 3,
+            uy: 6,
+            r: 5.05,
+            targetK: 3,
+            showPythagoras: false,
+            zoomIndex: 1, // 100% = Ficha 2 (0..11)
+            dragging: false,
+            animating: false,
+            animId: null,
+            catalog: [
+              { id: 'M1', sub: '1', x: 1, y: 9, cls: 'Agitada' },
+              { id: 'M3', sub: '3', x: 4, y: 7, cls: 'Agitada' },
+              { id: 'M2', sub: '2', x: 9, y: 2, cls: 'Calma' },
+              { id: 'M4', sub: '4', x: 7, y: 3, cls: 'Calma' },
+            ],
+            geom: null, // updated on each KNN draw for pointer mapping
+          },
+        };
+
+        /* =========================================================
+           DOM REFERENCES
+        ========================================================= */
+        const tabBtnBep = document.getElementById('tabBtnBep');
+        const tabBtnKnn = document.getElementById('tabBtnKnn');
+        const panelBep = document.getElementById('panelBep');
+        const panelKnn = document.getElementById('panelKnn');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // BEP DOM
+        const bepCanvasWrap = document.getElementById('bepCanvasWrap');
+        const bepCanvas = document.getElementById('bepCanvas');
+        const sliderCf = document.getElementById('sliderCf');
+        const sliderCv = document.getElementById('sliderCv');
+        const sliderP = document.getElementById('sliderP');
+        const valCf = document.getElementById('valCf');
+        const valCv = document.getElementById('valCv');
+        const valP = document.getElementById('valP');
+        const chkTablePoints = document.getElementById('chkTablePoints');
+        const btnBepDefault = document.getElementById('btnBepDefault');
+        const btnBepChallenge = document.getElementById('btnBepChallenge');
+        const bepEquations = document.getElementById('bepEquations');
+        const bepResultBox = document.getElementById('bepResultBox');
+        const btnZoomOut = document.getElementById('btnZoomOut');
+        const btnZoomReset = document.getElementById('btnZoomReset');
+        const btnZoomIn = document.getElementById('btnZoomIn');
+
+        // KNN DOM
+        const knnCanvasWrap = document.getElementById('knnCanvasWrap');
+        const knnCanvas = document.getElementById('knnCanvas');
+        const btnKnnZoomOut = document.getElementById('btnKnnZoomOut');
+        const btnKnnZoomReset = document.getElementById('btnKnnZoomReset');
+        const btnKnnZoomIn = document.getElementById('btnKnnZoomIn');
+        const legendU = document.getElementById('legendU');
+        const btnResetU = document.getElementById('btnResetU');
+        const btnK1 = document.getElementById('btnK1');
+        const btnK3 = document.getElementById('btnK3');
+        const btnAnimateString = document.getElementById('btnAnimateString');
+        const sliderR = document.getElementById('sliderR');
+        const valR = document.getElementById('valR');
+        const chkPythagoras = document.getElementById('chkPythagoras');
+        const knnTableBody = document.getElementById('knnTableBody');
+        const knnCircleEq = document.getElementById('knnCircleEq');
+        const knnVerdictKicker = document.getElementById('knnVerdictKicker');
+        const knnVerdictResult = document.getElementById('knnVerdictResult');
+        const knnVerdictVotes = document.getElementById('knnVerdictVotes');
+
+        /* =========================================================
+           CANVAS SIZING (HiDPI)
+        ========================================================= */
+        function setupHiDpiCanvas(canvas, wrap) {
+          const rect = wrap.getBoundingClientRect();
+          const w = Math.max(100, Math.floor(rect.width));
+          const h = Math.max(100, Math.floor(rect.height));
+          const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+          if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+            canvas.width = Math.round(w * dpr);
+            canvas.height = Math.round(h * dpr);
+          }
+          const ctx = canvas.getContext('2d');
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          return { ctx, w, h };
+        }
+
+        /* =========================================================
+           TAB 1: ECONOMIA (BEP) — UI & CANVAS RENDER
+        ========================================================= */
+        function updateBepUI() {
+          const { Cf, cv, p } = state.bep;
+          sliderCf.value = String(Cf);
+          sliderCv.value = String(cv);
+          sliderP.value = String(p);
+
+          valCf.textContent = 'R$ ' + Cf;
+          valCv.textContent = 'R$ ' + cv;
+          valP.textContent = 'R$ ' + p;
+
+          bepEquations.innerHTML =
+            '<span class="eq-cost">C(x) = ' +
+            cv +
+            'x + ' +
+            Cf +
+            '</span>' +
+            '<span class="eq-sep">|</span>' +
+            '<span class="eq-rev">R(x) = ' +
+            p +
+            'x</span>';
+
+          if (p <= cv) {
+            bepResultBox.innerHTML =
+              '<div class="bep-alert">⚠ Sem equilíbrio: p ≤ c<sub>v</sub></div>';
+          } else {
+            const xE = Cf / (p - cv);
+            const yE = p * xE;
+            const unitLabel = Math.abs(xE - 1) < 1e-6 ? 'camiseta' : 'camisetas';
+            bepResultBox.innerHTML =
+              '<span class="bep-kicker">Ponto de Equilíbrio (x<sub>E</sub>, y<sub>E</sub>)</span>' +
+              '<div class="bep-value">' +
+              fmtBR(xE, 2) +
+              ' ' +
+              unitLabel +
+              ' · ' +
+              fmtMoney(yE) +
+              '</div>';
+          }
+
+          const zoomCfg = BEP_ZOOM_LEVELS[state.bep.zoomIndex];
+          btnZoomReset.textContent = zoomCfg.label;
+          btnZoomIn.disabled = state.bep.zoomIndex <= 0;
+          btnZoomOut.disabled = state.bep.zoomIndex >= BEP_ZOOM_LEVELS.length - 1;
+
+          drawBepCanvas();
+        }
+
+        function drawDynamicZoneLabel(ctx, text, mode, opts) {
+          const {
+            C,
+            R,
+            xMinDomain,
+            xMaxDomain,
+            X_MAX,
+            Y_MAX,
+            plotW,
+            toPxX,
+            toPxY,
+            color,
+            maxFs,
+            minFs,
+          } = opts;
+
+          if (xMaxDomain - xMinDomain <= 0.15) return;
+
+          const pxPerX = plotW / X_MAX;
+          const padX = 14; // keep clear of Y-axis and plot borders
+          const padY = 12; // keep clear of C(x), R(x), and X/top borders
+
+          // Edge safety margins in data units
+          const domainLeft = Math.max(xMinDomain, padX / pxPerX);
+          const domainRight = Math.min(xMaxDomain, X_MAX - padX / pxPerX);
+          if (domainRight <= domainLeft) return;
+
+          for (let fs = maxFs; fs >= minFs; fs -= 1) {
+            ctx.font = '800 ' + fs + 'px ' + CANVAS_FONT;
+            const textW = ctx.measureText(text).width;
+            const neededDataW = (textW + padX * 2) / pxPerX;
+            if (neededDataW > domainRight - domainLeft) continue;
+
+            const neededPxH = fs + padY * 2;
+            let bestXL = -1;
+            let bestAvailH = 0;
+            const steps = 44;
+            const span = domainRight - domainLeft - neededDataW;
+
+            for (let i = 0; i <= steps; i++) {
+              const xL = domainLeft + (span * i) / steps;
+              const xR = xL + neededDataW;
+
+              let yCeil;
+              let yFloor;
+              if (mode === 'loss') {
+                // C(x) is upper bound (increasing -> lowest at xL), R(x) is lower bound (increasing -> highest at xR)
+                yCeil = Math.min(Y_MAX, C(xL));
+                yFloor = Math.max(0, R(xR));
+              } else {
+                // R(x) is upper bound (increasing -> lowest at xL), C(x) is lower bound (increasing -> highest at xR)
+                yCeil = Math.min(Y_MAX, R(xL));
+                yFloor = Math.max(0, C(xR));
+              }
+
+              if (yCeil <= yFloor) continue;
+              const availH = toPxY(yFloor) - toPxY(yCeil);
+              if (availH >= neededPxH && availH > bestAvailH) {
+                bestAvailH = availH;
+                bestXL = xL;
+              }
+            }
+
+            if (bestXL >= 0) {
+              const bestXR = bestXL + neededDataW;
+              const yCeil =
+                mode === 'loss'
+                  ? Math.min(Y_MAX, C(bestXL))
+                  : Math.min(Y_MAX, R(bestXL));
+              const yFloor =
+                mode === 'loss'
+                  ? Math.max(0, R(bestXR))
+                  : Math.max(0, C(bestXR));
+              const cx = toPxX((bestXL + bestXR) / 2);
+              const cy = (toPxY(yCeil) + toPxY(yFloor)) / 2;
+
+              ctx.save();
+              ctx.font = '800 ' + fs + 'px ' + CANVAS_FONT;
+              ctx.fillStyle = color;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(text, cx, cy);
+              ctx.restore();
+              return;
+            }
+          }
+        }
+
+        function drawBepCanvas() {
+          if (state.activeTab !== 'bep') return;
+          const { ctx, w, h } = setupHiDpiCanvas(bepCanvas, bepCanvasWrap);
+          const T = getThemeColors();
+          const { Cf, cv, p, showTablePoints, zoomIndex } = state.bep;
+
+          const z = BEP_ZOOM_LEVELS[zoomIndex] || BEP_ZOOM_LEVELS[2];
+          const X_MAX = z.xMax;
+          const Y_MAX = z.yMax;
+          const X_STEP = z.xStep;
+          const X_MINOR = z.xMinor;
+          const Y_STEP = z.yStep;
+          const Y_MINOR = z.yMinor;
+
+          const fontSizeAxis = Math.max(16, Math.min(20, Math.round(w * 0.017)));
+          const fontSizeTick = Math.max(16, Math.min(19, Math.round(w * 0.016)));
+
+          const padLeft = Math.max(88, fontSizeTick * 5.1);
+          const padRight = 32;
+          const padTop = 28;
+          const padBottom = Math.max(66, fontSizeAxis * 3.4);
+
+          const plotX = padLeft;
+          const plotY = padTop;
+          const plotW = Math.max(80, w - padLeft - padRight);
+          const plotH = Math.max(80, h - padTop - padBottom);
+
+          const toPxX = (x) => plotX + (x / X_MAX) * plotW;
+          const toPxY = (y) => plotY + plotH - (y / Y_MAX) * plotH;
+
+          // Clear transparent so MDA frosted panel glow shines around plot
+          ctx.clearRect(0, 0, w, h);
+
+          // Plot backdrop
+          ctx.fillStyle = T.plotBg;
+          ctx.fillRect(plotX, plotY, plotW, plotH);
+
+          // Graph paper grid — minor lines
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = T.gridMinor;
+          ctx.beginPath();
+          for (let x = X_MINOR; x < X_MAX - 1e-6; x += X_MINOR) {
+            const px = Math.round(toPxX(x)) + 0.5;
+            ctx.moveTo(px, plotY);
+            ctx.lineTo(px, plotY + plotH);
+          }
+          for (let y = Y_MINOR; y < Y_MAX - 1e-6; y += Y_MINOR) {
+            const py = Math.round(toPxY(y)) + 0.5;
+            ctx.moveTo(plotX, py);
+            ctx.lineTo(plotX + plotW, py);
+          }
+          ctx.stroke();
+
+          // Graph paper grid — major lines
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = T.gridMajor;
+          ctx.beginPath();
+          for (let x = 0; x <= X_MAX + 1e-6; x += X_STEP) {
+            const px = Math.round(toPxX(x)) + 0.5;
+            ctx.moveTo(px, plotY);
+            ctx.lineTo(px, plotY + plotH);
+          }
+          for (let y = 0; y <= Y_MAX + 1e-6; y += Y_STEP) {
+            const py = Math.round(toPxY(y)) + 0.5;
+            ctx.moveTo(plotX, py);
+            ctx.lineTo(plotX + plotW, py);
+          }
+          ctx.stroke();
+
+          const C = (x) => cv * x + Cf;
+          const R = (x) => p * x;
+          const hasBEP = p > cv;
+          const xE = hasBEP ? Cf / (p - cv) : Infinity;
+          const yE = hasBEP ? p * xE : Infinity;
+
+          // Clip inside plot area for shaded half-planes & lines
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(plotX, plotY, plotW, plotH);
+          ctx.clip();
+
+          // 1. Shaded Zona de Prejuízo (x from 0 to min(X_MAX, xE))
+          const xLossEnd = hasBEP ? Math.min(X_MAX, xE) : X_MAX;
+          if (xLossEnd > 0) {
+            ctx.fillStyle = T.lossFill;
+            ctx.beginPath();
+            ctx.moveTo(toPxX(0), toPxY(R(0)));
+            ctx.lineTo(toPxX(xLossEnd), toPxY(R(xLossEnd)));
+            ctx.lineTo(toPxX(xLossEnd), toPxY(C(xLossEnd)));
+            ctx.lineTo(toPxX(0), toPxY(C(0)));
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          // 2. Shaded Zona de Lucro (x from xE to X_MAX)
+          if (hasBEP && xE < X_MAX) {
+            ctx.fillStyle = T.profitFill;
+            ctx.beginPath();
+            ctx.moveTo(toPxX(xE), toPxY(yE));
+            ctx.lineTo(toPxX(X_MAX), toPxY(R(X_MAX)));
+            ctx.lineTo(toPxX(X_MAX), toPxY(C(X_MAX)));
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          // 3. Dynamic Zone Labels ("PREJUÍZO" & "LUCRO") — auto-sized strictly inside each visible wedge
+          const maxZoneFs = Math.max(18, Math.min(28, Math.round(w * 0.026)));
+          drawDynamicZoneLabel(ctx, 'PREJUÍZO', 'loss', {
+            C,
+            R,
+            xMinDomain: 0,
+            xMaxDomain: xLossEnd,
+            X_MAX,
+            Y_MAX,
+            plotW,
+            toPxX,
+            toPxY,
+            color: T.lossText,
+            maxFs: maxZoneFs,
+            minFs: 11,
+          });
+
+          if (hasBEP && xE < X_MAX && yE < Y_MAX) {
+            drawDynamicZoneLabel(ctx, 'LUCRO', 'profit', {
+              C,
+              R,
+              xMinDomain: xE,
+              xMaxDomain: X_MAX,
+              X_MAX,
+              Y_MAX,
+              plotW,
+              toPxX,
+              toPxY,
+              color: T.profitText,
+              maxFs: maxZoneFs,
+              minFs: 11,
+            });
+          }
+
+          // 4. Optional vertical reference lines for table points x = 5, 10
+          if (showTablePoints) {
+            ctx.save();
+            ctx.strokeStyle = T.textMuted;
+            ctx.globalAlpha = 0.45;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            [5, 10].forEach((tx) => {
+              if (tx <= X_MAX) {
+                ctx.beginPath();
+                ctx.moveTo(toPxX(tx), plotY);
+                ctx.lineTo(toPxX(tx), plotY + plotH);
+                ctx.stroke();
+              }
+            });
+            ctx.restore();
+          }
+
+          // 5. Line C(x) — Strong Red, 4.5px
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = T.cost;
+          ctx.beginPath();
+          ctx.moveTo(toPxX(0), toPxY(C(0)));
+          ctx.lineTo(toPxX(X_MAX), toPxY(C(X_MAX)));
+          ctx.stroke();
+
+          // 6. Line R(x) — Royal Blue, 4.5px
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = T.rev;
+          ctx.beginPath();
+          ctx.moveTo(toPxX(0), toPxY(R(0)));
+          ctx.lineTo(toPxX(X_MAX), toPxY(R(X_MAX)));
+          ctx.stroke();
+
+          // 7. Dashed guidelines from PE to axes (inside plot)
+          const bepInBounds = hasBEP && xE <= X_MAX + 1e-6 && yE <= Y_MAX + 1e-6;
+          if (bepInBounds) {
+            ctx.save();
+            ctx.strokeStyle = T.guide;
+            ctx.lineWidth = 2.8;
+            ctx.setLineDash([8, 6]);
+            ctx.beginPath();
+            ctx.moveTo(toPxX(xE), toPxY(yE));
+            ctx.lineTo(toPxX(xE), toPxY(0));
+            ctx.moveTo(toPxX(xE), toPxY(yE));
+            ctx.lineTo(toPxX(0), toPxY(yE));
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          ctx.restore(); // end plot clip
+
+          // 8. Plot Border & Bold Axes
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = T.axis;
+          ctx.beginPath();
+          ctx.moveTo(plotX, plotY);
+          ctx.lineTo(plotX, plotY + plotH);
+          ctx.lineTo(plotX + plotW, plotY + plotH);
+          ctx.stroke();
+
+          // Subtle top & right border of grid frame
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = T.gridMajor;
+          ctx.beginPath();
+          ctx.moveTo(plotX, plotY);
+          ctx.lineTo(plotX + plotW, plotY);
+          ctx.lineTo(plotX + plotW, plotY + plotH);
+          ctx.stroke();
+
+          // 9. Axis Ticks & Numbers (>= 16px bold)
+          ctx.fillStyle = T.text;
+          ctx.font = '700 ' + fontSizeTick + 'px ' + CANVAS_FONT;
+
+          // X ticks
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          for (let x = 0; x <= X_MAX + 1e-6; x += X_STEP) {
+            const px = toPxX(x);
+            ctx.strokeStyle = T.axis;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(px, plotY + plotH);
+            ctx.lineTo(px, plotY + plotH + 6);
+            ctx.stroke();
+            ctx.fillText(String(Math.round(x)), px, plotY + plotH + 9);
+          }
+
+          // Y ticks
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          for (let y = 0; y <= Y_MAX + 1e-6; y += Y_STEP) {
+            const py = toPxY(y);
+            ctx.strokeStyle = T.axis;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(plotX - 6, py);
+            ctx.lineTo(plotX, py);
+            ctx.stroke();
+            ctx.fillText(String(Math.round(y)), plotX - 10, py);
+          }
+
+          // Axis Titles
+          ctx.font = '800 ' + fontSizeAxis + 'px ' + CANVAS_FONT;
+          ctx.fillStyle = T.text;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText('Quantidade de Camisetas (x)', plotX + plotW / 2, h - 6);
+
+          ctx.save();
+          ctx.translate(22, plotY + plotH / 2);
+          ctx.rotate(-Math.PI / 2);
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText('Valor em R$ (y)', 0, -4);
+          ctx.restore();
+
+          // 10. Highlighted Origin (0,0) and Y-Intercept (0, Cf)
+          // Origin (0, 0) for R(x)
+          ctx.beginPath();
+          ctx.arc(toPxX(0), toPxY(0), 8.5, 0, Math.PI * 2);
+          ctx.fillStyle = T.rev;
+          ctx.fill();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = T.halo;
+          ctx.stroke();
+
+          // Y-intercept (0, Cf) for C(x)
+          if (Cf <= Y_MAX) {
+            ctx.beginPath();
+            ctx.arc(toPxX(0), toPxY(Cf), 9, 0, Math.PI * 2);
+            ctx.fillStyle = T.cost;
+            ctx.fill();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = T.halo;
+            ctx.stroke();
+
+            // Label for (0, Cf) when table points are off (to avoid duplicate label)
+            if (!showTablePoints) {
+              const cfTagY = Cf > Y_MAX * 0.9 ? toPxY(Cf) + 22 : toPxY(Cf) - 18;
+              drawTag(
+                ctx,
+                '(0, ' + Cf + ')',
+                toPxX(0) + 14,
+                cfTagY,
+                T.cost,
+                T.labelBg,
+                T.cost,
+                Math.max(15, fontSizeTick - 1),
+                'left'
+              );
+            }
+          }
+
+          // 11. Table Points (x = 0, 5, 10)
+          if (showTablePoints) {
+            const xs = [0, 5, 10];
+            const tagFont = Math.max(14, fontSizeTick - 2);
+            xs.forEach((tx) => {
+              if (tx > X_MAX) return;
+              const yc = C(tx);
+              const yr = R(tx);
+              const samePoint = Math.abs(yc - yr) < 1e-6;
+
+              if (yc <= Y_MAX) {
+                ctx.beginPath();
+                ctx.arc(toPxX(tx), toPxY(yc), 9, 0, Math.PI * 2);
+                ctx.fillStyle = T.cost;
+                ctx.fill();
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = T.halo;
+                ctx.stroke();
+
+                if (!samePoint) {
+                  const align = tx === 0 ? 'left' : 'right';
+                  const dx = tx === 0 ? 14 : -14;
+                  const dy = yc > yr ? -16 : 16;
+                  drawTag(
+                    ctx,
+                    '(' + tx + ', ' + fmtBR(yc, 0) + ')',
+                    toPxX(tx) + dx,
+                    toPxY(yc) + dy,
+                    T.cost,
+                    T.labelBg,
+                    T.cost,
+                    tagFont,
+                    align
+                  );
+                }
+              }
+
+              if (yr <= Y_MAX && !samePoint) {
+                ctx.beginPath();
+                ctx.arc(toPxX(tx), toPxY(yr), 9, 0, Math.PI * 2);
+                ctx.fillStyle = T.rev;
+                ctx.fill();
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = T.halo;
+                ctx.stroke();
+
+                const dy = tx === 0 ? -18 : yr > yc ? -16 : 18;
+                drawTag(
+                  ctx,
+                  '(' + tx + ', ' + fmtBR(yr, 0) + ')',
+                  toPxX(tx) + 14,
+                  toPxY(yr) + dy,
+                  T.rev,
+                  T.labelBg,
+                  T.rev,
+                  tagFont,
+                  'left'
+                );
+              }
+            });
+          }
+
+          // 12. Direct Curve Labels C(x) and R(x) avoiding collision with PE marker
+          const pexRef = bepInBounds ? toPxX(xE) : -9999;
+          const peyRef = bepInBounds ? toPxY(yE) : -9999;
+
+          const cExitX = Math.min(X_MAX, (Y_MAX - Cf) / cv);
+          if (cExitX > X_MAX * 0.12) {
+            let lx = Math.max(X_MAX * 0.14, cExitX - X_MAX * 0.08);
+            if (Math.hypot(toPxX(lx) - pexRef, toPxY(C(lx)) - peyRef) < 115) {
+              lx = cExitX * 0.55;
+            }
+            const ly = C(lx);
+            if (ly <= Y_MAX - Y_MAX * 0.04 && ly >= Y_MAX * 0.04) {
+              drawTag(
+                ctx,
+                'C(x)',
+                toPxX(lx),
+                toPxY(ly) + 24,
+                T.cost,
+                T.labelBg,
+                T.cost,
+                fontSizeTick,
+                'center'
+              );
+            }
+          }
+
+          const rExitX = Math.min(X_MAX, Y_MAX / p);
+          if (rExitX > X_MAX * 0.12) {
+            let lx = Math.max(X_MAX * 0.14, rExitX - X_MAX * 0.06);
+            if (Math.hypot(toPxX(lx) - pexRef, toPxY(R(lx)) - peyRef) < 125) {
+              lx = rExitX * 0.6;
+            }
+            const ly = R(lx);
+            if (ly <= Y_MAX - Y_MAX * 0.04 && ly >= Y_MAX * 0.06) {
+              drawTag(
+                ctx,
+                'R(x)',
+                toPxX(lx) - 16,
+                toPxY(ly) - 20,
+                T.rev,
+                T.labelBg,
+                T.rev,
+                fontSizeTick,
+                'right'
+              );
+            }
+          }
+
+          // 13. Break-Even Point Marker & Label (drawn on top, unclipped)
+          if (bepInBounds) {
+            const pex = toPxX(xE);
+            const pey = toPxY(yE);
+
+            // Outer gold ring
+            ctx.beginPath();
+            ctx.arc(pex, pey, 13, 0, Math.PI * 2);
+            ctx.fillStyle = T.peRing;
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = T.halo;
+            ctx.stroke();
+
+            // Inner bold dark core
+            ctx.beginPath();
+            ctx.arc(pex, pey, 7.5, 0, Math.PI * 2);
+            ctx.fillStyle = T.peCore;
+            ctx.fill();
+
+            // PE Label box — auto-flip relative to current zoomed axes
+            const peLabel = 'PE (' + fmtBR(xE, 1) + ', ' + fmtBR(yE, 0) + ')';
+            const nearRight = xE > X_MAX * 0.72;
+            const nearTop = yE > Y_MAX * 0.82;
+            const lx = nearRight ? pex - 18 : pex + 18;
+            const ly = nearTop ? pey + 26 : pey - 24;
+            const align = nearRight ? 'right' : 'left';
+
+            drawTag(
+              ctx,
+              peLabel,
+              lx,
+              ly,
+              T.text,
+              T.labelBg,
+              T.peRing,
+              Math.max(17, fontSizeTick + 1),
+              align,
+              2.5
+            );
+          } else if (hasBEP) {
+            // Out of chart bounds notice
+            const msg = 'PE fora do gráfico: (' + fmtBR(xE, 1) + ', ' + fmtBR(yE, 0) + ') ↗ · use Zoom (−)';
+            drawTag(
+              ctx,
+              msg,
+              plotX + plotW - 12,
+              plotY + 24,
+              T.text,
+              T.labelBg,
+              T.peRing,
+              Math.max(15, fontSizeTick - 1),
+              'right',
+              2.5
+            );
+          }
+        }
+
+        function drawTag(ctx, text, x, y, textColor, bgColor, borderColor, fontSize, align, borderW) {
+          ctx.save();
+          ctx.font = '800 ' + fontSize + 'px ' + CANVAS_FONT;
+          const metrics = ctx.measureText(text);
+          const padX = 8;
+          const padY = 4;
+          const boxW = metrics.width + padX * 2;
+          const boxH = fontSize + padY * 2;
+          let bx = x;
+          if (align === 'center') bx = x - boxW / 2;
+          else if (align === 'right') bx = x - boxW;
+          const by = y - boxH / 2;
+
+          drawRoundedRect(ctx, bx, by, boxW, boxH, 7);
+          ctx.fillStyle = bgColor;
+          ctx.fill();
+          ctx.lineWidth = borderW || 1.8;
+          ctx.strokeStyle = borderColor;
+          ctx.stroke();
+
+          ctx.fillStyle = textColor;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(text, bx + boxW / 2, by + boxH / 2 + 1);
+          ctx.restore();
+        }
+
+        /* =========================================================
+           TAB 2: CIÊNCIA DE DADOS (KNN) — MATH, UI & CANVAS RENDER
+        ========================================================= */
+        function getSortedDistances() {
+          const { ux, uy, catalog } = state.knn;
+          return catalog
+            .map((m) => {
+              const dx = m.x - ux;
+              const dy = m.y - uy;
+              const dist = Math.hypot(dx, dy);
+              return { ...m, dx, dy, dist };
+            })
+            .sort((a, b) => a.dist - b.dist || a.id.localeCompare(b.id));
+        }
+
+        function getTargetRadiusForK(k) {
+          const sorted = getSortedDistances();
+          const idx = Math.min(k - 1, sorted.length - 1);
+          const base = sorted[idx].dist;
+          // Exact classroom values at default U(3,6):
+          // K=1 -> sqrt(2)=1.4142 -> 1.42 ; K=3 -> 5.00 -> 5.05
+          if (k === 1) {
+            return Math.min(9.0, Math.max(0.05, Math.ceil((base + 0.004) * 100) / 100));
+          }
+          return Math.min(9.0, +(base + 0.05).toFixed(2));
+        }
+
+        function stopKnnAnimation() {
+          if (state.knn.animId !== null) {
+            cancelAnimationFrame(state.knn.animId);
+            state.knn.animId = null;
+          }
+          state.knn.animating = false;
+          btnAnimateString.textContent = '▶ Animar Barbante';
+        }
+
+        function startKnnAnimation() {
+          if (state.knn.animating) {
+            stopKnnAnimation();
+            return;
+          }
+          const k = state.knn.targetK || 3;
+          state.knn.targetK = k;
+          const sorted = getSortedDistances();
+          const targetR = getTargetRadiusForK(k);
+          const checkpoints = sorted
+            .slice(0, k)
+            .map((item) => item.dist)
+            .filter((d) => d > 0.05 && d < targetR);
+
+          state.knn.animating = true;
+          btnAnimateString.textContent = '■ Parar Animação';
+          state.knn.r = 0;
+          updateKnnUI();
+
+          const speed = Math.max(1.8, targetR / 2.2); // units per second
+          const pauseMs = 360;
+          let lastTime = performance.now();
+          let pauseRemaining = 0;
+          let nextCpIdx = 0;
+
+          function step(now) {
+            if (!state.knn.animating) return;
+            const dt = Math.min(0.05, (now - lastTime) / 1000);
+            lastTime = now;
+
+            if (pauseRemaining > 0) {
+              pauseRemaining -= dt * 1000;
+              state.knn.animId = requestAnimationFrame(step);
+              return;
+            }
+
+            let nextR = state.knn.r + speed * dt;
+
+            if (nextCpIdx < checkpoints.length && nextR >= checkpoints[nextCpIdx]) {
+              nextR = checkpoints[nextCpIdx] + 0.02;
+              nextCpIdx++;
+              pauseRemaining = pauseMs;
+            }
+
+            if (nextR >= targetR) {
+              state.knn.r = targetR;
+              updateKnnUI();
+              stopKnnAnimation();
+              return;
+            }
+
+            state.knn.r = +nextR.toFixed(2);
+            updateKnnUI();
+            state.knn.animId = requestAnimationFrame(step);
+          }
+
+          state.knn.animId = requestAnimationFrame(step);
+        }
+
+        function updateKnnUI() {
+          const { ux, uy, r, targetK } = state.knn;
+          const sorted = getSortedDistances();
+          const captured = sorted.filter((m) => m.dist <= r + 0.05);
+
+          sliderR.value = String(r);
+          valR.textContent = fmtFixed2(r);
+          legendU.textContent = '★ U(' + fmtBR(ux, 1) + ', ' + fmtBR(uy, 1) + ') · arraste';
+
+          btnK1.classList.toggle('k-active', targetK === 1);
+          btnK3.classList.toggle('k-active', targetK === 3);
+
+          // Render sorted distance table
+          knnTableBody.innerHTML = sorted
+            .map((m) => {
+              const isHit = m.dist <= r + 0.05;
+              const clsStyle = m.cls === 'Agitada' ? 'class-agitada' : 'class-calma';
+              const glyph = m.cls === 'Agitada' ? '▲' : '■';
+              const hitMark = isHit ? '✓ ' : '';
+              return (
+                '<tr class="' +
+                (isHit ? 'captured' : '') +
+                '">' +
+                '<td>' +
+                hitMark +
+                'M<sub>' +
+                m.sub +
+                '</sub></td>' +
+                '<td>(' +
+                m.x +
+                ', ' +
+                m.y +
+                ')</td>' +
+                '<td class="' +
+                clsStyle +
+                '">' +
+                glyph +
+                ' ' +
+                m.cls +
+                '</td>' +
+                '<td class="dist-num">' +
+                fmtFixed2(m.dist) +
+                '</td>' +
+                '</tr>'
+              );
+            })
+            .join('');
+
+          // Circle equation with semantic sup/sub
+          const xTerm =
+            Math.abs(ux) < 1e-6
+              ? 'x<sup>2</sup>'
+              : '(x − ' + fmtBR(ux, 1) + ')<sup>2</sup>';
+          const yTerm =
+            Math.abs(uy) < 1e-6
+              ? 'y<sup>2</sup>'
+              : '(y − ' + fmtBR(uy, 1) + ')<sup>2</sup>';
+          knnCircleEq.innerHTML =
+            xTerm + ' + ' + yTerm + ' = ' + fmtFixed2(r) + '<sup>2</sup>';
+
+          // Verdict card
+          const kCount = captured.length;
+          if (kCount === 0) {
+            knnVerdictKicker.textContent = 'Nenhum vizinho capturado (K = 0)';
+            knnVerdictResult.textContent = 'Aumente o raio r';
+            knnVerdictResult.className = 'verdict-result';
+            knnVerdictVotes.textContent = 'Use o slider ou clique em K = 1 / K = 3';
+          } else {
+            let votesAgitada = 0;
+            let votesCalma = 0;
+            captured.forEach((m) => {
+              if (m.cls === 'Agitada') votesAgitada++;
+              else votesCalma++;
+            });
+
+            knnVerdictKicker.textContent = 'Recomendação (K = ' + kCount + ')';
+            if (votesAgitada > votesCalma) {
+              knnVerdictResult.textContent = '▲ AGITADA';
+              knnVerdictResult.className = 'verdict-result class-agitada';
+              knnVerdictVotes.textContent =
+                votesAgitada +
+                (votesAgitada === 1 ? ' voto' : ' votos') +
+                ' contra ' +
+                votesCalma;
+            } else if (votesCalma > votesAgitada) {
+              knnVerdictResult.textContent = '■ CALMA';
+              knnVerdictResult.className = 'verdict-result class-calma';
+              knnVerdictVotes.textContent =
+                votesCalma +
+                (votesCalma === 1 ? ' voto' : ' votos') +
+                ' contra ' +
+                votesAgitada;
+            } else {
+              knnVerdictResult.textContent = 'EMPATE';
+              knnVerdictResult.className = 'verdict-result';
+              knnVerdictVotes.textContent =
+                votesAgitada +
+                ' Agitada vs ' +
+                votesCalma +
+                ' Calma (prefira K ímpar)';
+            }
+          }
+
+          const knnZoomCfg = KNN_ZOOM_LEVELS[state.knn.zoomIndex] || KNN_ZOOM_LEVELS[1];
+          btnKnnZoomReset.textContent = knnZoomCfg.label;
+          btnKnnZoomIn.disabled = state.knn.zoomIndex <= 0;
+          btnKnnZoomOut.disabled = state.knn.zoomIndex >= KNN_ZOOM_LEVELS.length - 1;
+
+          drawKnnCanvas();
+        }
+
+        function drawTriangleMarker(ctx, cx, cy, radius, fill, stroke) {
+          ctx.beginPath();
+          const h = radius * 1.18;
+          ctx.moveTo(cx, cy - h);
+          ctx.lineTo(cx + h * 0.96, cy + h * 0.78);
+          ctx.lineTo(cx - h * 0.96, cy + h * 0.78);
+          ctx.closePath();
+          ctx.fillStyle = fill;
+          ctx.fill();
+          ctx.lineWidth = 2.8;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+        }
+
+        function drawSquareMarker(ctx, cx, cy, radius, fill, stroke) {
+          const s = radius * 1.75;
+          ctx.beginPath();
+          ctx.rect(cx - s / 2, cy - s / 2, s, s);
+          ctx.fillStyle = fill;
+          ctx.fill();
+          ctx.lineWidth = 2.8;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+        }
+
+        function drawStar(ctx, cx, cy, spikes, outerR, innerR, fill) {
+          let rot = (Math.PI / 2) * 3;
+          const step = Math.PI / spikes;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy - outerR);
+          for (let i = 0; i < spikes; i++) {
+            ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+            rot += step;
+            ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+            rot += step;
+          }
+          ctx.closePath();
+          ctx.fillStyle = fill;
+          ctx.fill();
+        }
+
+        function drawKnnCanvas() {
+          if (state.activeTab !== 'knn') return;
+          const { ctx, w, h } = setupHiDpiCanvas(knnCanvas, knnCanvasWrap);
+          const T = getThemeColors();
+          const { ux, uy, r, showPythagoras, zoomIndex } = state.knn;
+          const sorted = getSortedDistances();
+
+          const kz = KNN_ZOOM_LEVELS[zoomIndex] || KNN_ZOOM_LEVELS[1];
+          const MIN_VAL = kz.min;
+          const MAX_VAL = kz.max;
+          const STEP = kz.step;
+          const MINOR = kz.minor;
+          const SPAN = MAX_VAL - MIN_VAL;
+
+          const fontSizeAxis = Math.max(16, Math.min(20, Math.round(Math.min(w, h) * 0.03)));
+          const fontSizeTick = Math.max(16, Math.min(19, Math.round(Math.min(w, h) * 0.028)));
+
+          const padLeft = Math.max(66, fontSizeAxis * 3.5);
+          const padRight = 24;
+          const padTop = 22;
+          const padBottom = Math.max(62, fontSizeAxis * 3.2);
+
+          // STRICT 1:1 SQUARE ASPECT RATIO for geometrically perfect circle
+          const availW = Math.max(80, w - padLeft - padRight);
+          const availH = Math.max(80, h - padTop - padBottom);
+          const plotSize = Math.min(availW, availH);
+
+          const plotX = Math.round(padLeft + (availW - plotSize) / 2);
+          const plotY = Math.round(padTop + (availH - plotSize) / 2);
+          const scale = plotSize / SPAN; // identical px-per-unit for X and Y!
+
+          const toPxX = (x) => plotX + (x - MIN_VAL) * scale;
+          const toPxY = (y) => plotY + plotSize - (y - MIN_VAL) * scale;
+
+          state.knn.geom = { plotX, plotY, plotSize, scale, min: MIN_VAL, max: MAX_VAL };
+
+          // Clear transparent so MDA frosted panel glow shines around plot
+          ctx.clearRect(0, 0, w, h);
+
+          // Plot backdrop
+          ctx.fillStyle = T.plotBg;
+          ctx.fillRect(plotX, plotY, plotSize, plotSize);
+
+          // Minor gridlines
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = T.gridMinor;
+          ctx.beginPath();
+          for (let i = MIN_VAL + MINOR; i < MAX_VAL - 1e-6; i += MINOR) {
+            const px = Math.round(toPxX(i)) + 0.5;
+            const py = Math.round(toPxY(i)) + 0.5;
+            ctx.moveTo(px, plotY);
+            ctx.lineTo(px, plotY + plotSize);
+            ctx.moveTo(plotX, py);
+            ctx.lineTo(plotX + plotSize, py);
+          }
+          ctx.stroke();
+
+          // Major gridlines
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = T.gridMajor;
+          ctx.beginPath();
+          for (let i = MIN_VAL; i <= MAX_VAL + 1e-6; i += STEP) {
+            const px = Math.round(toPxX(i)) + 0.5;
+            const py = Math.round(toPxY(i)) + 0.5;
+            ctx.moveTo(px, plotY);
+            ctx.lineTo(px, plotY + plotSize);
+            ctx.moveTo(plotX, py);
+            ctx.lineTo(plotX + plotSize, py);
+          }
+          ctx.stroke();
+
+          // Highlight x = 0 and y = 0 origin axes when zoomed out into negative range
+          if (MIN_VAL < 0) {
+            ctx.save();
+            ctx.lineWidth = 2.2;
+            ctx.strokeStyle = T.originAxis;
+            ctx.beginPath();
+            const ox = Math.round(toPxX(0)) + 0.5;
+            const oy = Math.round(toPxY(0)) + 0.5;
+            ctx.moveTo(ox, plotY);
+            ctx.lineTo(ox, plotY + plotSize);
+            ctx.moveTo(plotX, oy);
+            ctx.lineTo(plotX + plotSize, oy);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Clipped region for circle, string segments & Pythagoras triangles
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(plotX, plotY, plotSize, plotSize);
+          ctx.clip();
+
+          const uxPx = toPxX(ux);
+          const uyPx = toPxY(uy);
+          const rPx = r * scale;
+
+          // 1. Circle (Barbante / Circunferência)
+          if (r > 0) {
+            ctx.beginPath();
+            ctx.arc(uxPx, uyPx, rPx, 0, Math.PI * 2);
+            ctx.fillStyle = T.circleFill;
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = T.circleStroke;
+            ctx.setLineDash([10, 7]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+
+          // 2. Captured points: Pythagorean Right Triangles & String Segments
+          sorted.forEach((m) => {
+            const isHit = m.dist <= r + 0.05;
+            if (!isHit) return;
+
+            const mxPx = toPxX(m.x);
+            const myPx = toPxY(m.y);
+
+            // Optional Pythagorean right triangle
+            if (showPythagoras && Math.abs(m.dx) > 1e-4 && Math.abs(m.dy) > 1e-4) {
+              const cornerX = mxPx;
+              const cornerY = uyPx;
+
+              ctx.save();
+              ctx.strokeStyle = T.pythColor;
+              ctx.lineWidth = 3;
+              ctx.setLineDash([6, 4]);
+              ctx.beginPath();
+              ctx.moveTo(uxPx, uyPx);
+              ctx.lineTo(cornerX, cornerY);
+              ctx.lineTo(mxPx, myPx);
+              ctx.stroke();
+              ctx.setLineDash([]);
+
+              // Right-angle square symbol
+              const sq = 11;
+              const sx = uxPx < cornerX ? -sq : sq;
+              const sy = myPx < cornerY ? -sq : sq;
+              ctx.lineWidth = 2.2;
+              ctx.beginPath();
+              ctx.moveTo(cornerX + sx, cornerY);
+              ctx.lineTo(cornerX + sx, cornerY + sy);
+              ctx.lineTo(cornerX, cornerY + sy);
+              ctx.stroke();
+
+              // Leg length labels (Δx and Δy)
+              const legFont = Math.max(14, fontSizeTick - 2);
+              const dxLabel = 'Δx=' + fmtBR(Math.abs(m.dx), 1);
+              const dyLabel = 'Δy=' + fmtBR(Math.abs(m.dy), 1);
+              const dxOffY = myPx < cornerY ? 16 : -16;
+              const dyOffX = uxPx < cornerX ? 10 : -10;
+              const dyAlign = uxPx < cornerX ? 'left' : 'right';
+
+              drawTag(
+                ctx,
+                dxLabel,
+                (uxPx + cornerX) / 2,
+                cornerY + dxOffY,
+                T.pythColor,
+                T.labelBg,
+                T.pythColor,
+                legFont,
+                'center',
+                1.5
+              );
+              drawTag(
+                ctx,
+                dyLabel,
+                cornerX + dyOffX,
+                (cornerY + myPx) / 2,
+                T.pythColor,
+                T.labelBg,
+                T.pythColor,
+                legFont,
+                dyAlign,
+                1.5
+              );
+              ctx.restore();
+            }
+
+            // String segment from U to captured point
+            ctx.save();
+            ctx.strokeStyle = m.cls === 'Agitada' ? T.agitada : T.calma;
+            ctx.lineWidth = 4;
+            ctx.setLineDash([8, 5]);
+            ctx.beginPath();
+            ctx.moveTo(uxPx, uyPx);
+            ctx.lineTo(mxPx, myPx);
+            ctx.stroke();
+            ctx.restore();
+
+            // Distance tag on string midpoint
+            if (m.dist > 0.35) {
+              const midX = (uxPx + mxPx) / 2;
+              const midY = (uyPx + myPx) / 2;
+              drawTag(
+                ctx,
+                fmtFixed2(m.dist),
+                midX,
+                midY,
+                m.cls === 'Agitada' ? T.agitada : T.calma,
+                T.labelBg,
+                m.cls === 'Agitada' ? T.agitada : T.calma,
+                Math.max(14, fontSizeTick - 2),
+                'center',
+                2
+              );
+            }
+          });
+
+          ctx.restore(); // end plot clip
+
+          // 3. Axes & Frame
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = T.axis;
+          ctx.beginPath();
+          ctx.moveTo(plotX, plotY);
+          ctx.lineTo(plotX, plotY + plotSize);
+          ctx.lineTo(plotX + plotSize, plotY + plotSize);
+          ctx.stroke();
+
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = T.gridMajor;
+          ctx.beginPath();
+          ctx.moveTo(plotX, plotY);
+          ctx.lineTo(plotX + plotSize, plotY);
+          ctx.lineTo(plotX + plotSize, plotY + plotSize);
+          ctx.stroke();
+
+          // 4. Ticks & Axis Numbers (>= 16px bold)
+          ctx.fillStyle = T.text;
+          ctx.font = '700 ' + fontSizeTick + 'px ' + CANVAS_FONT;
+
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          for (let i = MIN_VAL; i <= MAX_VAL + 1e-6; i += STEP) {
+            const px = toPxX(i);
+            ctx.strokeStyle = T.axis;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(px, plotY + plotSize);
+            ctx.lineTo(px, plotY + plotSize + 6);
+            ctx.stroke();
+            ctx.fillText(String(Math.round(i)), px, plotY + plotSize + 9);
+          }
+
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          for (let i = MIN_VAL; i <= MAX_VAL + 1e-6; i += STEP) {
+            const py = toPxY(i);
+            ctx.strokeStyle = T.axis;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(plotX - 6, py);
+            ctx.lineTo(plotX, py);
+            ctx.stroke();
+            ctx.fillText(String(Math.round(i)), plotX - 10, py);
+          }
+
+          // Axis Titles
+          ctx.font = '800 ' + fontSizeAxis + 'px ' + CANVAS_FONT;
+          ctx.fillStyle = T.text;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText('Acústica (x)', plotX + plotSize / 2, h - 6);
+
+          ctx.save();
+          ctx.translate(Math.max(20, plotX - 52), plotY + plotSize / 2);
+          ctx.rotate(-Math.PI / 2);
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText('Energia (y)', 0, 0);
+          ctx.restore();
+
+          // 5. Catalog Points (M1, M2, M3, M4) — clipped cleanly if zoomed in past a point
+          sorted.forEach((m) => {
+            if (m.x < MIN_VAL || m.x > MAX_VAL || m.y < MIN_VAL || m.y > MAX_VAL) return;
+            const mxPx = toPxX(m.x);
+            const myPx = toPxY(m.y);
+            const isHit = m.dist <= r + 0.05;
+            const color = m.cls === 'Agitada' ? T.agitada : T.calma;
+
+            // Highlight ring when captured inside circle
+            if (isHit) {
+              ctx.beginPath();
+              ctx.arc(mxPx, myPx, 20, 0, Math.PI * 2);
+              ctx.fillStyle =
+                m.cls === 'Agitada'
+                  ? 'rgba(234, 88, 12, 0.22)'
+                  : 'rgba(29, 78, 216, 0.22)';
+              ctx.fill();
+              ctx.lineWidth = 3;
+              ctx.strokeStyle = color;
+              ctx.stroke();
+            }
+
+            if (m.cls === 'Agitada') {
+              drawTriangleMarker(ctx, mxPx, myPx, 11.5, color, T.halo);
+            } else {
+              drawSquareMarker(ctx, mxPx, myPx, 10.5, color, T.halo);
+            }
+
+            // Point label (smart side placement relative to current zoomed range)
+            const label = m.id + '(' + m.x + ', ' + m.y + ')';
+            const placeLeft = m.x >= MAX_VAL - SPAN * 0.28;
+            const offX = placeLeft ? -18 : 18;
+            const offY = m.y >= MAX_VAL - SPAN * 0.18 ? 16 : -18;
+            drawTag(
+              ctx,
+              label,
+              mxPx + offX,
+              myPx + offY,
+              color,
+              T.labelBg,
+              color,
+              Math.max(15, fontSizeTick - 1),
+              placeLeft ? 'right' : 'left',
+              isHit ? 2.5 : 1.8
+            );
+          });
+
+          // 6. Listener Point U (Double Circle + Star)
+          if (ux >= MIN_VAL && ux <= MAX_VAL && uy >= MIN_VAL && uy <= MAX_VAL) {
+            // Outer ring
+            ctx.beginPath();
+            ctx.arc(uxPx, uyPx, 15.5, 0, Math.PI * 2);
+            ctx.fillStyle = T.halo;
+            ctx.fill();
+            ctx.lineWidth = 3.5;
+            ctx.strokeStyle = T.uColor;
+            ctx.stroke();
+
+            // Inner solid circle
+            ctx.beginPath();
+            ctx.arc(uxPx, uyPx, 10.5, 0, Math.PI * 2);
+            ctx.fillStyle = T.uColor;
+            ctx.fill();
+
+            // Crisp star inside
+            drawStar(ctx, uxPx, uyPx, 5, 7.5, 3.4, T.uRing);
+
+            // U Label
+            const uLabel = 'U(' + fmtBR(ux, 1) + ', ' + fmtBR(uy, 1) + ')';
+            const uAlign = ux > MAX_VAL - SPAN * 0.28 ? 'right' : 'left';
+            const uOffX = ux > MAX_VAL - SPAN * 0.28 ? -20 : 20;
+            const uOffY = uy < MIN_VAL + SPAN * 0.15 ? -22 : 22;
+            drawTag(
+              ctx,
+              uLabel,
+              uxPx + uOffX,
+              uyPx + uOffY,
+              T.text,
+              T.labelBg,
+              T.uColor,
+              Math.max(16, fontSizeTick),
+              uAlign,
+              2.5
+            );
+          }
+        }
+
+        /* =========================================================
+           KNN POINTER DRAG (MOUSE + TOUCH)
+        ========================================================= */
+        function pointerToKnnCoords(ev) {
+          const g = state.knn.geom;
+          if (!g) return null;
+          const rect = knnCanvas.getBoundingClientRect();
+          const px = ev.clientX - rect.left;
+          const py = ev.clientY - rect.top;
+          const x = g.min + (px - g.plotX) / g.scale;
+          const y = g.min + (g.plotY + g.plotSize - py) / g.scale;
+          return { px, py, x, y };
+        }
+
+        function setUFromPointer(ev) {
+          const pt = pointerToKnnCoords(ev);
+          if (!pt) return;
+          // Snap to 0.5 grid for clean classroom demonstration
+          const snappedX = Math.max(0, Math.min(11, Math.round(pt.x * 2) / 2));
+          const snappedY = Math.max(0, Math.min(11, Math.round(pt.y * 2) / 2));
+          if (snappedX !== state.knn.ux || snappedY !== state.knn.uy) {
+            state.knn.ux = snappedX;
+            state.knn.uy = snappedY;
+            updateKnnUI();
+          }
+        }
+
+        knnCanvas.addEventListener('pointerdown', (ev) => {
+          const pt = pointerToKnnCoords(ev);
+          if (!pt) return;
+          const g = state.knn.geom;
+          const insidePlot =
+            pt.px >= g.plotX - 18 &&
+            pt.px <= g.plotX + g.plotSize + 18 &&
+            pt.py >= g.plotY - 18 &&
+            pt.py <= g.plotY + g.plotSize + 18;
+          if (!insidePlot) return;
+
+          stopKnnAnimation();
+          state.knn.dragging = true;
+          knnCanvas.style.cursor = 'grabbing';
+          try {
+            knnCanvas.setPointerCapture(ev.pointerId);
+          } catch (_) {}
+          setUFromPointer(ev);
+        });
+
+        knnCanvas.addEventListener('pointermove', (ev) => {
+          if (state.knn.dragging) {
+            setUFromPointer(ev);
+            return;
+          }
+          const pt = pointerToKnnCoords(ev);
+          if (!pt || !state.knn.geom) return;
+          const g = state.knn.geom;
+          const distPx = Math.hypot(
+            pt.px - (g.plotX + (state.knn.ux - g.min) * g.scale),
+            pt.py - (g.plotY + g.plotSize - (state.knn.uy - g.min) * g.scale)
+          );
+          knnCanvas.style.cursor = distPx <= 28 ? 'grab' : 'crosshair';
+        });
+
+        function endKnnDrag(ev) {
+          if (!state.knn.dragging) return;
+          state.knn.dragging = false;
+          knnCanvas.style.cursor = 'grab';
+          try {
+            knnCanvas.releasePointerCapture(ev.pointerId);
+          } catch (_) {}
+        }
+
+        knnCanvas.addEventListener('pointerup', endKnnDrag);
+        knnCanvas.addEventListener('pointercancel', endKnnDrag);
+
+        /* =========================================================
+           EVENT LISTENERS
+        ========================================================= */
+        // Tabs
+        function switchTab(tab) {
+          state.activeTab = tab;
+          const isBep = tab === 'bep';
+          tabBtnBep.classList.toggle('active', isBep);
+          tabBtnBep.setAttribute('aria-selected', String(isBep));
+          tabBtnKnn.classList.toggle('active', !isBep);
+          tabBtnKnn.setAttribute('aria-selected', String(!isBep));
+          panelBep.classList.toggle('active', isBep);
+          panelKnn.classList.toggle('active', !isBep);
+
+          if (isBep) {
+            stopKnnAnimation();
+            requestAnimationFrame(drawBepCanvas);
+          } else {
+            requestAnimationFrame(drawKnnCanvas);
+          }
+        }
+
+        tabBtnBep.addEventListener('click', () => switchTab('bep'));
+        tabBtnKnn.addEventListener('click', () => switchTab('knn'));
+
+        // Theme toggle (Light default for TV projection)
+        themeToggleBtn.addEventListener('click', () => {
+          const isDark = document.documentElement.classList.toggle('dark');
+          themeToggleBtn.setAttribute('aria-pressed', String(isDark));
+          themeIcon.textContent = isDark ? '☀' : '☾';
+          themeLabel.textContent = isDark ? 'Claro' : 'Escuro';
+          drawBepCanvas();
+          drawKnnCanvas();
+        });
+
+        // Fullscreen hint click
+        fullscreenBtn.addEventListener('click', () => {
+          try {
+            if (!document.fullscreenElement) {
+              if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+              }
+            } else if (document.exitFullscreen) {
+              document.exitFullscreen().catch(() => {});
+            }
+          } catch (_) {}
+        });
+
+        // BEP Controls
+        sliderCf.addEventListener('input', () => {
+          state.bep.Cf = Number(sliderCf.value);
+          updateBepUI();
+        });
+        sliderCv.addEventListener('input', () => {
+          state.bep.cv = Number(sliderCv.value);
+          updateBepUI();
+        });
+        sliderP.addEventListener('input', () => {
+          state.bep.p = Number(sliderP.value);
+          updateBepUI();
+        });
+        chkTablePoints.addEventListener('change', () => {
+          state.bep.showTablePoints = chkTablePoints.checked;
+          drawBepCanvas();
+        });
+        btnBepDefault.addEventListener('click', () => {
+          state.bep.Cf = 300;
+          state.bep.cv = 20;
+          state.bep.p = 50;
+          state.bep.zoomIndex = 2;
+          updateBepUI();
+        });
+        btnBepChallenge.addEventListener('click', () => {
+          state.bep.Cf = 450;
+          state.bep.cv = 20;
+          state.bep.p = 50;
+          updateBepUI();
+        });
+        btnZoomOut.addEventListener('click', () => {
+          if (state.bep.zoomIndex < BEP_ZOOM_LEVELS.length - 1) {
+            state.bep.zoomIndex += 1;
+            updateBepUI();
+          }
+        });
+        btnZoomIn.addEventListener('click', () => {
+          if (state.bep.zoomIndex > 0) {
+            state.bep.zoomIndex -= 1;
+            updateBepUI();
+          }
+        });
+        btnZoomReset.addEventListener('click', () => {
+          state.bep.zoomIndex = 2;
+          updateBepUI();
+        });
+
+        // KNN Controls
+        btnResetU.addEventListener('click', () => {
+          stopKnnAnimation();
+          state.knn.ux = 3;
+          state.knn.uy = 6;
+          state.knn.targetK = 3;
+          state.knn.r = 5.05;
+          state.knn.zoomIndex = 1;
+          updateKnnUI();
+        });
+
+        btnKnnZoomOut.addEventListener('click', () => {
+          if (state.knn.zoomIndex < KNN_ZOOM_LEVELS.length - 1) {
+            state.knn.zoomIndex += 1;
+            updateKnnUI();
+          }
+        });
+
+        btnKnnZoomIn.addEventListener('click', () => {
+          if (state.knn.zoomIndex > 0) {
+            state.knn.zoomIndex -= 1;
+            updateKnnUI();
+          }
+        });
+
+        btnKnnZoomReset.addEventListener('click', () => {
+          state.knn.zoomIndex = 1;
+          updateKnnUI();
+        });
+
+        btnK1.addEventListener('click', () => {
+          stopKnnAnimation();
+          state.knn.targetK = 1;
+          state.knn.r = getTargetRadiusForK(1);
+          updateKnnUI();
+        });
+
+        btnK3.addEventListener('click', () => {
+          stopKnnAnimation();
+          state.knn.targetK = 3;
+          state.knn.r = getTargetRadiusForK(3);
+          updateKnnUI();
+        });
+
+        btnAnimateString.addEventListener('click', startKnnAnimation);
+
+        sliderR.addEventListener('input', () => {
+          stopKnnAnimation();
+          // Snap manual drag cleanly to 0.1 steps as specified
+          const raw = Number(sliderR.value);
+          state.knn.r = Math.round(raw * 10) / 10;
+          state.knn.targetK = null;
+          updateKnnUI();
+        });
+
+        chkPythagoras.addEventListener('change', () => {
+          state.knn.showPythagoras = chkPythagoras.checked;
+          drawKnnCanvas();
+        });
+
+        /* =========================================================
+           RESPONSIVE RESIZE OBSERVER
+        ========================================================= */
+        if (typeof ResizeObserver !== 'undefined') {
+          const ro = new ResizeObserver(() => {
+            if (state.activeTab === 'bep') drawBepCanvas();
+            else drawKnnCanvas();
+          });
+          ro.observe(bepCanvasWrap);
+          ro.observe(knnCanvasWrap);
+        } else {
+          window.addEventListener('resize', () => {
+            if (state.activeTab === 'bep') drawBepCanvas();
+            else drawKnnCanvas();
+          });
+        }
+
+        /* =========================================================
+           INITIAL RENDER
+        ========================================================= */
+        updateBepUI();
+        updateKnnUI();
+
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => {
+            if (state.activeTab === 'bep') drawBepCanvas();
+            else drawKnnCanvas();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
