@@ -6,6 +6,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: '/GA_Na_Pratica/',
     plugins: [
       react(),
       tailwindcss(),
